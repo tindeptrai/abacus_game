@@ -110,7 +110,7 @@ class AbacusCubit extends Cubit<AbacusState> {
   void resetGame(){
     final numbers = generateNumbers();
     BigInt result = getResult(numbers: numbers);
-    length = result.toString().length;
+    length = result.toString().length > 5 ? result.toString().length : 5;
     emit(state.copyWith(numbers: numbers));
     resetShapes();
   }
@@ -153,7 +153,7 @@ class AbacusCubit extends Cubit<AbacusState> {
     'A1,A2,A5': 7,
     'A1,A2,A3,A5': 8,
     'A1,A2,A3,A4,A5': 9,
-    'A5,A6': 0,
+    // 'A5,A6': 0,
   };
 
 
@@ -166,18 +166,44 @@ class AbacusCubit extends Cubit<AbacusState> {
       shape = SquareModel(data: []);
     }
     else if (shape.data.length < oldShape.data.length) {
-      // If new shape has fewer edges, check if it maps to a valid number
+      // If new shape has fewer edges, find the minimum valid mapping value
       var keys = shape.data.map((e) => e.value).toList()..sort();
-      final keysStr = keys.join(',');
-      if (!mapping.containsKey(keysStr)) {
-        // If not valid, set to 0 by using A5,A6 combination
+      
+      // Find all valid combinations that can be formed with remaining segments
+      var validCombinations = <String>[];
+      for (var entry in mapping.entries) {
+        final entries = entry.key.split(',');
+        // Check if all segments in the combination are present in the current shape
+        if (entries.every((element) => keys.contains(element))) {
+          validCombinations.add(entry.key);
+        }
+      }
+
+      if (validCombinations.isEmpty) {
+        // If no valid combination found, set to empty
         shape = SquareModel(data: []);
+      } else {
+        // Find the combination with minimum value
+        var maxValue = -1;
+        var bestCombination = '';
+        for (var combination in validCombinations) {
+          var value = mapping[combination] ?? -1;
+          if (value > maxValue) {
+            maxValue = value;
+            bestCombination = combination;
+          }
+        }
+        
+        // Convert best combination back to LineSegments
+        shape = SquareModel(
+          data: bestCombination.split(',').map((e) => 
+            LineSegment.values.firstWhere((ls) => ls.value == e)
+          ).toList()
+        );
       }
     } else if (shape.data.length > oldShape.data.length) {
       // If new shape has more edges, find closest valid number
       var keys = shape.data.map((e) => e.value).toList()..sort();
-      final keysStr = keys.join(',');
-
       // Find valid combination with closest number of edges
       var bestMatch = ''; // Default to 0
       var bestDiff = 999;
