@@ -8,7 +8,7 @@ import '../../../../core/core.dart';
 class SquarePainter extends CustomPainter {
   final Function(LineSegment)? onLineTap;
   final Set<LineSegment> selectedLines;
-  final double touchTolerance = 20.0;
+  final double touchTolerance = 15.0;
 
   SquarePainter({
     this.onLineTap,
@@ -339,29 +339,39 @@ class _SquareWithDiagonalsState extends State<SquareWithDiagonals> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (TapDownDetails details) {
-        final RenderBox renderBox = context.findRenderObject() as RenderBox;
-        final localPosition = renderBox.globalToLocal(details.globalPosition);
-        final painter = SquarePainter(
-          onLineTap: widget.onLineTap,
-          selectedLines: selectedLines,
-        );
-        final selectedLine = painter.getSelectedLine(localPosition, Size(widget.width, widget.height));
-        if (selectedLine != null) {
-          _handleTap(selectedLine);
-        }
-      },
-      child: CustomPaint(
-        key: ValueKey(selectedLines.toString()),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        CustomPaint(
+          key: ValueKey(selectedLines.toString()),
 
-        /// force rebuild khi selectedLines thay đổi
-        painter: SquarePainter(
-          onLineTap: widget.onLineTap,
-          selectedLines: selectedLines,
+          /// force rebuild khi selectedLines thay đổi
+          painter: SquarePainter(
+            onLineTap: widget.onLineTap,
+            selectedLines: selectedLines,
+          ),
+          size: Size(widget.width, widget.height),
         ),
-        size: Size(widget.width, widget.height),
-      ),
+        GestureDetector(
+          onTapDown: (TapDownDetails details) {
+            final RenderBox renderBox = context.findRenderObject() as RenderBox;
+            final localPosition = renderBox.globalToLocal(details.globalPosition);
+            final painter = SquarePainter(
+              onLineTap: widget.onLineTap,
+              selectedLines: selectedLines,
+            );
+            final selectedLine = painter.getSelectedLine(localPosition, Size(widget.width, widget.height));
+            if (selectedLine != null) {
+              _handleTap(selectedLine);
+            }
+          },
+          child: Container(
+            color: Colors.transparent,
+            width: widget.width + 20,
+            height: widget.height + 20,
+          ),
+        ),
+      ],
     );
   }
 }
