@@ -122,7 +122,7 @@ class SquarePainter extends CustomPainter {
         ..strokeCap = StrokeCap.round
         ..style = PaintingStyle.fill;
 
-      const dotSize = 1.0;
+      var dotSize = 1.0;
       const dotSpace = 1.0;
       const offsetDistance = 10.0;
       const cornerRadius = 4.0;
@@ -136,11 +136,18 @@ class SquarePainter extends CustomPainter {
         end = end - direction * -5;
         perpendicularDirection = Offset(direction.dy, -direction.dx);
         dotPaint.strokeWidth = 1.0;
+        if (selectedLines.isEmpty ) {
+          dotSize = 2.0;
+        } else {
+          dotSize= 1.0;
+        }
       } else if (isVertical) {
+        dotSize = 1.0;
         start = start + direction * -10 ;
         end = end - direction * -10 ;
         perpendicularDirection = Offset(-direction.dy, direction.dx);
       } else {
+        dotSize = 1.0;
         // Đường ngang khi được chọn sẽ dài thêm 10
         if (isSelected) {
           start = start - direction * 10;

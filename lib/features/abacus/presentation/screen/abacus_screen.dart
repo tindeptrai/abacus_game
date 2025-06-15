@@ -106,7 +106,7 @@ class _AbacusScreenState extends State<AbacusScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: 150,
+                          width: MediaQuery.of(context).size.width * 0.15,
                           child: FittedBox(
                             child: Row(
                               children: [
@@ -169,12 +169,12 @@ class _AbacusScreenState extends State<AbacusScreen> {
                         Column(
                           children: [
                             SizedBox(
-                              width: 150,
+                              width: MediaQuery.of(context).size.width * 0.15,
                               height: MediaQuery.of(context).size.height * 0.5,
                               child: topicWidget(state.numbers),
                             ),
                             SizedBox(
-                              width: 150,
+                              width: MediaQuery.of(context).size.width * 0.15,
                               child: ButtonCommon(
                                 onPressed: () async {
                                   // abacusCubit.convertShapeToNumber();
@@ -267,6 +267,8 @@ class _HorizontalListWidgetState extends State<HorizontalListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width * 0.5 / 5;
+    final height = MediaQuery.of(context).size.height * 0.3;
     return Column(
       children: [
         Container(
@@ -296,8 +298,8 @@ class _HorizontalListWidgetState extends State<HorizontalListWidget> {
                 child: Container(
                   alignment: Alignment.center,
                   child: SquareWithDiagonals(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    width: MediaQuery.of(context).size.height * 0.2,
+                    height: height,
+                    width: width,
                     onLineTap: (line) {},
                     onSelectedLines: (lines) {
                       widget.abacusCubit.onChangeDataInShape(item, index, lines);
