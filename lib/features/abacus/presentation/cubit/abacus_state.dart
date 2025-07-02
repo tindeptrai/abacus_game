@@ -5,10 +5,11 @@ import '../../abacus.dart';
 
 class AbacusState extends Equatable {
   final List<SquareModel>? shapes;
-  final List<BigInt>? numbers;
+  final List<TopicModel>? numbers;
   final String result;
   final int hearts;
   final String playerName;
+  final int index;
 
   const AbacusState({
     this.shapes,
@@ -16,13 +17,15 @@ class AbacusState extends Equatable {
     this.result = "0",
     this.hearts = 0,
     this.playerName = "",
+    this.index = 0,
   });
 
   AbacusState copyWith({
     List<SquareModel>? shapes,
-    List<BigInt>? numbers,
+    List<TopicModel>? numbers,
     String? result,
     int? hearts,
+    int? index,
     String? playerName,
   }) {
     return AbacusState(
@@ -30,6 +33,7 @@ class AbacusState extends Equatable {
       numbers: numbers ?? this.numbers,
       result: result ?? this.result,
       hearts: hearts ?? this.hearts,
+      index: index ?? this.index,
       playerName: playerName ?? this.playerName,
     );
   }
@@ -41,5 +45,6 @@ class AbacusState extends Equatable {
         result,
         hearts,
         playerName,
+        index,
       ];
 }
