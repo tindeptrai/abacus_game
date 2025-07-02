@@ -15,6 +15,6 @@ class AbacusModule extends Module {
   @override
   void routes(r) {
     r.child(AppRouteConstants.defaultRoute, child: (context) => AbacusSettingsScreen(Modular.get<AbacusSettingsCubit>()));
-    r.child(AppRouteConstants.abacusGameScreenRoute, child: (context) => AbacusScreen(Modular.get()));
+    r.child(AppRouteConstants.abacusGameScreenRoute, child: (context) => AbacusScreen());
   }
 }
